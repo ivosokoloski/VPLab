@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Book Reservation - Welcome and choose a Book</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .book-option {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .book-option:hover {
+            background-color: #f5f5f5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            padding: 4px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-info { background-color: #17a2b8; color: white; }
+        .btn-sm { font-size: 0.8em; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Book Reservation App</h1>
+
+    <form th:action="@{/books}" method="get" style="margin-top: 20px;">
+        <label>Избери автор:</label>
+        <select name="authorId">
+            <option value="" th:text="'Сите автори'" th:selected="${selectedAuthor == null}"></option>
+            <option th:each="author : ${authors}"
+                    th:value="${author.id}"
+                    th:text="${author.name} + ' ' + ${author.surname}"
+                    th:selected="${selectedAuthor == author.id}">
+            </option>
+        </select>
+        <button type="submit" class="btn btn-primary">Филтрирај</button>
+    </form>
+</header>
+
+<main>
+    <a th:href="@{'/books/add-form'}" class="btn btn-primary btn-sm">Add Book</a>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Average Rating</th>
+            <th>Author Name</th>
+            <th>Author Surname</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}" class="book">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.genre}"></td>
+            <td th:text="${book.averageRating}"></td>
+            <td th:text="${book.author.name}"></td>
+            <td th:text="${book.author.surname}"></td>
+            <td class="text-right">
+                <form th:action="@{'/books/delete/' + ${book.id}}" method="post" style="display:inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                <a th:href="@{'/books/edit/{id}' (id=${book.id})}" class="btn btn-info btn-sm">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="container mt-5">
+        <h2>Book Reservation Form</h2>
+        <form th:action="@{/bookReservation}" method="post">
+            <div class="form-group">
+                <label for="bookTitle">Book Title</label>
+                <input type="text" class="form-control" id="bookTitle" name="bookTitle" placeholder="Enter book title" required>
+            </div>
+            <div class="form-group">
+                <label for="numCopies">Number of Copies</label>
+                <input type="number" class="form-control" id="numCopies" name="numCopies" min="1" value="1" required>
+            </div>
+            <div class="form-group">
+                <label for="readerName">Your Name</label>
+                <input type="text" class="form-control" id="readerName" name="readerName" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="readerAddress">Your Address</label>
+                <input type="text" class="form-control" id="readerAddress" name="readerAddress" placeholder="Enter your address" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Reserve Book</button>
+        </form>
+
+        <h2 th:if="${selectedAuthor != null}">
+            Книги на автор:
+            <span th:text="${selectedAuthor.name} + ' ' + ${selectedAuthor.surname}"></span>
+        </h2>
+
+        <ul>
+            <li th:each="book : ${books}" th:text="${book.title}"></li>
+        </ul>
+    </div>
+</main>
+</body>
+</html>
