@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Confirmation</title>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Reservation Confirmation</h2>
+    <p><strong>Book Title:</strong> <span th:text="${bookTitle}"></span></p>
+    <p><strong>Number of Copies:</strong> <span th:text="${numCopies}"></span></p>
+    <p><strong>Reader Name:</strong> <span th:text="${readerName}"></span></p>
+    <p><strong>Your IP Address:</strong> <span th:text="${clientIp}"></span></p>
+    <a href="/books" class="btn btn-primary">Make Another Reservation</a>
+</div>
+</body>
+</html>
